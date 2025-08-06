@@ -12,6 +12,7 @@ public class Benchmarks
     private Naive _naive;
     private RecreateArray _recreateArray;
     private Sergey _sergey;
+    private Michael _michael;
 
 
     [GlobalSetup]
@@ -20,6 +21,7 @@ public class Benchmarks
         _naive = new Naive(Length);
         _recreateArray = new RecreateArray(Length);
         _sergey = new Sergey(Length);
+        _michael = new Michael(Length);
     }
 
     [Benchmark(Baseline = true)]
@@ -28,4 +30,7 @@ public class Benchmarks
     public void RecreateArray() => _recreateArray.SetAllCells(1);
     [Benchmark]
     public void Sergey() => _sergey.SetAllCells(1);
+    
+    [Benchmark]
+    public void Michael() => _michael.SetAllCells(1);
 }

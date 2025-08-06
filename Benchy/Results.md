@@ -1,13 +1,16 @@
 Results
 
-| Method      | Length | _type         |       Mean |     Error |    StdDev | Allocated |
-|-------------|--------|---------------|-----------:|----------:|----------:|----------:|
-| SetAllCells | 10     | Naive         | 11.3345 ns | 0.0178 ns | 0.0148 ns |         - |
-| SetAllCells | 10     | RecreateArray | 10.9758 ns | 0.0458 ns | 0.0428 ns |         - |
-| SetAllCells | 10     | Sergey        | 11.3209 ns | 0.0120 ns | 0.0112 ns |         - |
-| SetAllCells | 1000   | Naive         |  9.0793 ns | 0.0165 ns | 0.0154 ns |         - |
-| SetAllCells | 1000   | RecreateArray |  9.1287 ns | 0.0436 ns | 0.0387 ns |         - |
-| SetAllCells | 1000   | Sergey        |  9.1469 ns | 0.0941 ns | 0.0880 ns |         - |
-| SetAllCells | 100000 | Naive         |  9.0797 ns | 0.0266 ns | 0.0249 ns |         - |
-| SetAllCells | 100000 | RecreateArray |  9.0769 ns | 0.0188 ns | 0.0167 ns |         - |
-| SetAllCells | 100000 | Sergey        |  9.0845 ns | 0.0151 ns | 0.0141 ns |         - |
+| Method        | Length |          Mean |       Error |      StdDev | Ratio |    Gen0 |    Gen1 |    Gen2 | Allocated | Alloc Ratio |
+|---------------|--------|--------------:|------------:|------------:|------:|--------:|--------:|--------:|----------:|------------:|
+| Naive         | 10     |     11.137 ns |   0.0112 ns |   0.0100 ns |  1.00 |       - |       - |       - |         - |          NA |
+| RecreateArray | 10     |     14.819 ns |   0.0543 ns |   0.0508 ns |  1.33 |  0.0153 |       - |       - |      96 B |          NA |
+| Sergey        | 10     |      1.176 ns |   0.0038 ns |   0.0035 ns |  0.11 |       - |       - |       - |         - |          NA |
+|               |        |               |             |             |       |         |         |         |           |             |
+| Naive         | 1000   |    525.009 ns |   0.8039 ns |   0.7520 ns | 1.000 |       - |       - |       - |         - |          NA |
+| RecreateArray | 1000   |    244.728 ns |   2.4168 ns |   2.2606 ns | 0.466 |  0.6461 |  0.0095 |       - |    4056 B |          NA |
+| Sergey        | 1000   |      1.174 ns |   0.0035 ns |   0.0033 ns | 0.002 |       - |       - |       - |         - |          NA |
+|               |        |               |             |             |       |         |         |         |           |             |
+| Naive         | 100000 | 51,642.830 ns |  39.3240 ns |  36.7837 ns | 1.000 |       - |       - |       - |         - |          NA |
+| RecreateArray | 100000 | 35,346.246 ns | 404.2239 ns | 378.1112 ns | 0.684 | 67.8711 | 67.6880 | 67.6880 |  400630 B |          NA |
+| Sergey        | 100000 |      1.170 ns |   0.0023 ns |   0.0020 ns | 0.000 |       - |       - |       - |         - |          NA |
+

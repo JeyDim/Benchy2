@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using Benchy;
 using Benchy.Solutions;
 
 BenchmarkRunner.Run<Benchmarks>();
@@ -9,18 +8,24 @@ BenchmarkRunner.Run<Benchmarks>();
 public class Benchmarks
 {
     [Params(10, 1000, 100_000)] public int Length = 10;
-    [Params(typeof(Naive), typeof(RecreateArray), typeof(Sergey))] public Type _type = typeof(Naive);
 
-    private readonly ITask0 _task0;
+    private Naive _naive;
+    private RecreateArray _recreateArray;
+    private Sergey _sergey;
 
-    public Benchmarks()
+
+    [GlobalSetup]
+    public void Do()
     {
-        // todo create _naive by type from Type
-
-        var task0 = Activator.CreateInstance(_type, args: Length) as ITask0;
-        _task0 = task0 ?? throw new Exception("Task0 is null");
+        _naive = new Naive(Length);
+        _recreateArray = new RecreateArray(Length);
+        _sergey = new Sergey(Length);
     }
-    
+
+    [Benchmark(Baseline = true)]
+    public void Naive() => _naive.SetAllCells(1);
     [Benchmark]
-    public void SetAllCells() => _task0.SetAllCells(1);
+    public void RecreateArray() => _recreateArray.SetAllCells(1);
+    [Benchmark]
+    public void Sergey() => _sergey.SetAllCells(1);
 }

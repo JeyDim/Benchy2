@@ -1,121 +1,38 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Benchy;
 using Benchy.Solutions;
 
-// BenchmarkRunner.Run<BenchmarkSetAllCells>();
-// BenchmarkRunner.Run<BenchmarkSetCell>();
-BenchmarkRunner.Run<BenchmarkGetCell>();
+BenchmarkRunner.Run<Benchmarks>();
 
 [MemoryDiagnoser]
-public class BenchmarkSetAllCells
+public class Benchmarks
 {
-    [Params(10, 100, 1000)] public int Length = 10;
+    [Params(typeof(Naive), typeof(RecreateArray), typeof(Sergey), typeof(Sergey2), typeof(Michael), typeof(Michael2))] public Type _type = typeof(Naive);
 
-    private Naive _naive;
-    private RecreateArray _recreateArray;
-    private Sergey _sergey;
-    private Sergey2 _sergey2;
-    private Michael _michael;
+    [Params(1000, 10_000, 100_000)] public int Length = 10;
 
+    private ITask0 _task0;
 
     [GlobalSetup]
     public void Do()
     {
-        _naive = new Naive(Length);
-        _recreateArray = new RecreateArray(Length);
-        _sergey = new Sergey(Length);
-        _sergey2 = new Sergey2(Length);
-        _michael = new Michael(Length);
+        var task0 = Activator.CreateInstance(_type, args: Length) as ITask0;
+        _task0 = task0 ?? throw new Exception("Task0 is null");
     }
 
-    [Benchmark(Baseline = true)]
-    public void Naive() => _naive.SetAllCells(1);
-
-    [Benchmark]
-    public void RecreateArray() => _recreateArray.SetAllCells(1);
-
-    [Benchmark]
-    public void Sergey() => _sergey.SetAllCells(1);
-    [Benchmark]
-    public void Sergey2() => _sergey2.SetAllCells(1);
-
-    [Benchmark]
-    public void Michael() => _michael.SetAllCells(1);
-}
-
-
-[MemoryDiagnoser]
-public class BenchmarkSetCell
-{
-    [Params(10, 100, 1000)] public int Length = 10;
-
-    private Naive _naive;
-    private RecreateArray _recreateArray;
-    private Sergey _sergey;
-    private Sergey2 _sergey2;
-    private Michael _michael;
-
-
-    [GlobalSetup]
-    public void Do()
+    [IterationSetup]
+    public void Boost()
     {
-        _naive = new Naive(Length);
-        _recreateArray = new RecreateArray(Length);
-        _sergey = new Sergey(Length);
-        _sergey2 = new Sergey2(Length);
-        _michael = new Michael(Length);
+        for (var j = 0; j < Length; j++) _task0.SetCell(1, j);
     }
 
-    [Benchmark(Baseline = true)]
-    public void Naive() => _naive.SetCell(1, 1);
+    [Benchmark]
+    public void SetCell() => _task0.SetCell(1, 0);
 
     [Benchmark]
-    public void RecreateArray() => _recreateArray.SetCell(1, 1);
+    public void GetCell() => _task0.GetCell(0);
 
     [Benchmark]
-    public void Sergey() => _sergey.SetCell(1, 1);
-
-    [Benchmark]
-    public void Sergey2() => _sergey2.SetCell(1, 1);
-
-    [Benchmark]
-    public void Michael() => _michael.SetCell(1, 1);
-}
-
-[MemoryDiagnoser]
-public class BenchmarkGetCell
-{
-    [Params(10, 100, 1000)] public int Length = 10;
-
-    private Naive _naive;
-    private RecreateArray _recreateArray;
-    private Sergey _sergey;
-    private Sergey2 _sergey2;
-    private Michael _michael;
-
-
-    [GlobalSetup]
-    public void Do()
-    {
-        _naive = new Naive(Length);
-        _recreateArray = new RecreateArray(Length);
-        _sergey = new Sergey(Length);
-        _sergey2 = new Sergey2(Length);
-        _michael = new Michael(Length);
-    }
-
-    [Benchmark(Baseline = true)]
-    public void Naive() => _naive.GetCell(1);
-
-    [Benchmark]
-    public void RecreateArray() => _recreateArray.GetCell(1);
-
-    [Benchmark]
-    public void Sergey() => _sergey.GetCell(1);
-
-    [Benchmark]
-    public void Sergey2() => _sergey2.GetCell(1);
-
-    [Benchmark]
-    public void Michael() => _michael.GetCell(1);
+    public void SetAllCells() => _task0.SetAllCells(1);
 }
